@@ -1,6 +1,6 @@
 <template>
   <div>
-    <circle-point />
+    <circle-point :is-active="isActive" />
   </div>
 </template>
 
@@ -12,6 +12,10 @@ export default {
     data: {
       type: Object,
       required: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: false,
     },
   },
   components: { CirclePoint },
