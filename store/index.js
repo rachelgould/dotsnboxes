@@ -1,7 +1,7 @@
 export const state = () => ({
   settings: {
     rows: 3,
-    columns: 3,
+    columns: 4,
   },
   players: [{ name: '😍' }, { name: '😂' }],
   board: [],
@@ -29,12 +29,13 @@ export const actions = {
   initBoard({ state, commit }) {
     let board = []
     const { rows, columns } = state.settings
-    for (let i = 0; i < rows * columns; i++) {
+    const totalDots = rows * columns
+    for (let i = 0; i < totalDots; i++) {
       board.push({
-        top: null,
-        bottom: null,
-        left: null,
-        right: null,
+        top: i > columns - 1 ? null : 'illegal',
+        bottom: i < totalDots - columns ? null : 'illegal',
+        left: i !== 0 && i % columns !== 0 ? null : 'illegal',
+        right: (i + 1) % columns !== 0 ? null : 'illegal',
       })
     }
     commit('updateBoard', board)
