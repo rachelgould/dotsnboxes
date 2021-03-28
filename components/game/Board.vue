@@ -1,17 +1,15 @@
 <template>
   <div :class="gridClass">
-    <div v-for="cell in game" :key="`gr${cell}`">
-      <circle-point />
-    </div>
+    <cell v-for="(cell, i) in game" :key="`gr${i}`" :data="cell" />
   </div>
 </template>
 
 <script>
-import CirclePoint from '@/components/game/CirclePoint'
+import Cell from '@/components/game/Cell'
 
 export default {
   name: 'board',
-  components: { CirclePoint },
+  components: { Cell },
   data: (inst) => ({
     gridClass: `w-80 h-80 grid grid-cols-${inst.$store.state.settings.columns} grid-rows-${inst.$store.state.settings.rows}`,
   }),
