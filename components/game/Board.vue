@@ -5,7 +5,8 @@
       :key="`gr${i}`"
       :data="cell"
       :is-active="i === activeCell"
-      @click="changeActiveCell(i)"
+      :index="i"
+      :make-active="changeActiveCell"
     />
   </div>
 </template>
