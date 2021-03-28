@@ -4,7 +4,7 @@ export const state = () => ({
     columns: 3,
   },
   players: [{ name: '😍' }, { name: '😂' }],
-  board: false,
+  board: [],
 })
 
 export const mutations = {
