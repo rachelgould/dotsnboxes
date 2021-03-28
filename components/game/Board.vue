@@ -1,7 +1,7 @@
 <template>
   <div :class="gridClass">
-    <div :class="rowClass" v-for="row in game" :key="`gr${row}`">
-      <circle-point v-for="point in row" :key="`c${row}${point}`" />
+    <div v-for="cell in game" :key="`gr${cell}`">
+      <circle-point />
     </div>
   </div>
 </template>

@@ -29,17 +29,13 @@ export const actions = {
   initBoard({ state, commit }) {
     let board = []
     const { rows, columns } = state.settings
-    for (let i = 0; i < rows; i++) {
-      let thisRow = []
-      for (let z = 0; z < columns; z++) {
-        thisRow.push({
-          top: null,
-          bottom: null,
-          left: null,
-          right: null,
-        })
-      }
-      board.push(thisRow)
+    for (let i = 0; i < rows * columns; i++) {
+      board.push({
+        top: null,
+        bottom: null,
+        left: null,
+        right: null,
+      })
     }
     commit('updateBoard', board)
   },
