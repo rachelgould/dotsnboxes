@@ -35,10 +35,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    makeActive: {
-      type: Function,
-      default: () => {},
-    },
   },
   data: () => ({
     hovered: false,
