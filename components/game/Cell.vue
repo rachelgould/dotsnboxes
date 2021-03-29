@@ -1,6 +1,6 @@
 <template>
   <div
-    @click="changeActiveCell(index)"
+    @click="clickCell(index)"
     @mouseover="changeHover(true)"
     @mouseleave="changeHover(false)"
   >
@@ -51,7 +51,7 @@ export default {
       }
     },
     ...mapActions({
-      changeActiveCell: 'changeActiveCell',
+      clickCell: 'clickCell',
     }),
   },
 }
