@@ -5,11 +5,21 @@ export const state = () => ({
   },
   players: [{ name: '😍' }, { name: '😂' }],
   board: [],
+  activeCell: null,
 })
+
+export const getters = {
+  findBorder(index, secondIndex) {
+    // returns 'top', 'bottom','right','left' or false
+  },
+}
 
 export const mutations = {
   updateBoard(state, nextState) {
     state.board = nextState
+  },
+  updateActive(state, nextState) {
+    state.activeCell = nextState
   },
   // add(state, text) {
   //   state.list.push({
@@ -32,6 +42,7 @@ export const actions = {
     const totalDots = rows * columns
     for (let i = 0; i < totalDots; i++) {
       board.push({
+        index: i,
         top: i > columns - 1 ? null : 'illegal',
         bottom: i < totalDots - columns ? null : 'illegal',
         left: i !== 0 && i % columns !== 0 ? null : 'illegal',
@@ -39,5 +50,8 @@ export const actions = {
       })
     }
     commit('updateBoard', board)
+  },
+  changeActiveCell({ commit }, newActive) {
+    commit('updateActive', newActive)
   },
 }

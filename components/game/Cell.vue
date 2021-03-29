@@ -1,22 +1,23 @@
 <template>
   <div
-    @click="makeActive(index)"
+    @click="changeActiveCell(index)"
     @mouseover="changeHover(true)"
     @mouseleave="changeHover(false)"
   >
     <circle-point :is-active="isActive" :hovered="hovered" />
     <div
-      v-if="data.right === null"
-      class="z-10 w-100 h-0.5 bg-black relative -top-1.5"
+      v-if="data.right === 'filled'"
+      class="z-10 w-100 h-0.5 bg-yellow-800 relative -top-1.5"
     />
     <div
-      v-if="data.bottom === null"
-      class="z-10 h-full w-0.5 bg-black relative -top-1.5"
+      v-if="data.bottom === 'filled'"
+      class="z-10 h-full w-0.5 bg-yellow-800 relative -top-1.5"
     />
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import CirclePoint from '@/components/game/CirclePoint'
 
 export default {
@@ -38,16 +39,13 @@ export default {
       type: Function,
       default: () => {},
     },
-    activeCell: {
-      required: true,
-    },
   },
   data: () => ({
     hovered: false,
   }),
   computed: {
     canHover() {
-      return false
+      return true
     },
   },
   methods: {
@@ -56,6 +54,9 @@ export default {
         this.hovered = newVal
       }
     },
+    ...mapActions({
+      changeActiveCell: 'changeActiveCell',
+    }),
   },
 }
 </script>
