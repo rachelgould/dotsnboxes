@@ -81,6 +81,7 @@ export const actions = {
         right: (i + 1) % columns !== 0 ? null : 'illegal',
       })
     }
+    commit('updateActive', null)
     commit('updateBoard', board)
   },
   endTurn({ commit }) {
