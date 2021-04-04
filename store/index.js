@@ -6,10 +6,12 @@ export const state = () => ({
   players: [{ name: '😍' }, { name: '😂' }],
   board: [],
   activeCell: null,
+  activePlayer: 0,
 })
 
 export const getters = {
   getBoard: (state) => state.board,
+  getActivePlayer: (state) => state.players[state.activePlayer].name,
   getActiveCell: (state) => state.activeCell,
   getCellData: (state) => (id) => state.board[id],
   getActiveCellData: (state, getters) => {
@@ -61,6 +63,9 @@ export const mutations = {
   updateActive(state, nextState) {
     state.activeCell = nextState
   },
+  flipActivePlayer(state) {
+    state.activePlayer = state.activePlayer ? 0 : 1
+  },
 }
 
 export const actions = {
@@ -76,6 +81,9 @@ export const actions = {
       })
     }
     commit('updateBoard', board)
+  },
+  endTurn({ commit }) {
+    commit('flipActivePlayer')
   },
   addLine({ commit, getters }, index) {
     const borderDirection = getters.getBorderDir(index)
@@ -101,6 +109,7 @@ export const actions = {
       commit('updateActive', index)
     } else {
       dispatch('addLine', index)
+      dispatch('endTurn')
       // TODO: detect new boxes and put player icon inside it
     }
   },

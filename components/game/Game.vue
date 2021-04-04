@@ -1,15 +1,15 @@
 <template>
   <div>
-    <base-button :click-action="startGame">Hello</base-button>
+    <p>{{ getActivePlayer }}'s Turn!</p>
+    <base-button :click-action="startGame">Start Game</base-button>
     <div>
-      {{ game }}
       <board />
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import BaseButton from '@/components/base/BaseButton'
 import CirclePoint from '@/components/game/CirclePoint'
 import Board from '@/components/game/Board'
@@ -18,9 +18,7 @@ export default {
   name: 'game',
   components: { BaseButton, CirclePoint, Board },
   computed: {
-    game() {
-      return this.$store.state.board
-    },
+    ...mapGetters(['getActivePlayer']),
   },
   methods: {
     ...mapActions({
