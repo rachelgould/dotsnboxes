@@ -52,6 +52,13 @@ export const mutations = {
   updateBoard(state, nextState) {
     state.board = nextState
   },
+  updateCell(state, { index, direction }) {
+    console.log(index, direction)
+    let nextState = [...state.board]
+    let nextChangedCell = { ...state.board[index] }
+    nextChangedCell[direction] = 'filled'
+    state.board = nextState
+  },
   updateActive(state, nextState) {
     state.activeCell = nextState
   },
@@ -71,23 +78,24 @@ export const actions = {
     }
     commit('updateBoard', board)
   },
-  changeActiveCell({ commit }, index) {
-    commit('updateActive', index)
-  },
   addLine({ commit, getters }, index) {
     const borderDirection = getters.getBorderDir(index)
+    const changePayload = {}
     if (borderDirection) {
-      const boardState = [...getters.getBoard]
       if (borderDirection === 'right' || borderDirection === 'bottom') {
-        boardState[getters.getActiveCell][borderDirection] = 'filled'
+        changePayload.index = getters.getActiveCell
+        changePayload.direction = borderDirection
+        console.log('changePayload', changePayload)
       }
       if (borderDirection === 'left') {
-        boardState[index]['right'] = 'filled'
+        changePayload.index = index
+        changePayload.direction = 'right'
       }
       if (borderDirection === 'top') {
-        boardState[index]['bottom'] = 'filled'
+        changePayload.index = index
+        changePayload.direction = 'bottom'
       }
-      commit('updateBoard', boardState)
+      commit('updateCell', changePayload)
       commit('updateActive', null)
     } else {
       // TODO: Add something like error state
