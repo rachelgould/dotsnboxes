@@ -9,19 +9,42 @@ export const state = () => ({
 })
 
 export const getters = {
-  getActiveCellData: (state) =>
-    state.activeCell ? state.board[state.activeCell] : null,
+  getBoard: (state) => state.board,
+  getActiveCell: (state) => state.activeCell,
+  getCellData: (state) => (id) => state.board[id],
+  getActiveCellData: (state, getters) => {
+    return state.activeCell !== null
+      ? getters.getCellData(state.activeCell)
+      : null
+  },
+  getBorderDir: (state, getters) => (clickedId) => {
+    const { columns } = state.settings
+    const active = getters.getActiveCellData
+    const clicked = getters.getCellData(clickedId)
 
-  cellIsClickable: (state, getters) => (index) => {
-    const active = getters['getActiveCellData']
-    if (
-      (active.bottom === 'illegal' || active.bottom === 'filled') &&
-      (active.right === 'illegal' || active.right === 'filled')
-    ) {
-      return false
+    if (!active) {
+      console.log('no active')
+      return
     }
-    // Todo: logic here
-    return true
+
+    if (active.index + 1 === clickedId && active.right !== 'illegal') {
+      return 'right'
+    }
+    if (active.index - 1 === clickedId && clicked.right !== 'illegal') {
+      return 'left'
+    }
+    if (
+      (clickedId - active.index) % columns === 0 &&
+      active.bottom !== 'illegal'
+    ) {
+      return 'bottom'
+    }
+    if (
+      (active.index - clickedId) % columns === 0 &&
+      clickedId.bottom !== 'illegal'
+    ) {
+      return 'top'
+    }
   },
 }
 
@@ -32,21 +55,6 @@ export const mutations = {
   updateActive(state, nextState) {
     state.activeCell = nextState
   },
-  addLine(state, index, direction) {
-    console.log('Add line!')
-  },
-  // add(state, text) {
-  //   state.list.push({
-  //     text,
-  //     done: false,
-  //   })
-  // },
-  // remove(state, { todo }) {
-  //   state.list.splice(state.list.indexOf(todo), 1)
-  // },
-  // toggle(state, todo) {
-  //   todo.done = !todo.done
-  // },
 }
 
 export const actions = {
@@ -57,9 +65,7 @@ export const actions = {
     for (let i = 0; i < totalDots; i++) {
       board.push({
         index: i,
-        top: i > columns - 1 ? null : 'illegal',
         bottom: i < totalDots - columns ? null : 'illegal',
-        left: i !== 0 && i % columns !== 0 ? null : 'illegal',
         right: (i + 1) % columns !== 0 ? null : 'illegal',
       })
     }
@@ -68,13 +74,30 @@ export const actions = {
   changeActiveCell({ commit }, index) {
     commit('updateActive', index)
   },
-  clickCell({ state, commit, getters }, index) {
+  addLine({ commit, getters }, index) {
+    const borderDirection = getters.getBorderDir(index)
+    if (borderDirection) {
+      const boardState = [...getters.getBoard]
+      if (borderDirection === 'right' || borderDirection === 'bottom') {
+        boardState[getters.getActiveCell][borderDirection] = 'filled'
+      }
+      if (borderDirection === 'left') {
+        boardState[index]['right'] = 'filled'
+      }
+      if (borderDirection === 'top') {
+        boardState[index]['bottom'] = 'filled'
+      }
+      commit('updateBoard', boardState)
+      commit('updateActive', null)
+    } else {
+      // TODO: Add something like error state
+    }
+  },
+  clickCell({ state, dispatch, commit }, index) {
     if (state.activeCell === null) {
       commit('updateActive', index)
-    } else if (getters['cellIsClickable'](index)) {
-      // Todo: fill in right or bottom!
-      let direction = 'dunno'
-      commit('addLine', index, direction)
+    } else {
+      dispatch('addLine', index)
     }
   },
 }
