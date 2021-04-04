@@ -35,16 +35,17 @@ export const getters = {
       return 'left'
     }
     if (
-      (clickedId - active.index) % columns === 0 &&
-      active.bottom !== 'illegal'
-    ) {
-      return 'bottom'
-    }
-    if (
+      clickedId < active.index &&
       (active.index - clickedId) % columns === 0 &&
       clickedId.bottom !== 'illegal'
     ) {
       return 'top'
+    }
+    if (
+      (clickedId - active.index) % columns === 0 &&
+      active.bottom !== 'illegal'
+    ) {
+      return 'bottom'
     }
   },
 }
