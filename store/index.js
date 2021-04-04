@@ -57,6 +57,7 @@ export const mutations = {
     let nextState = [...state.board]
     let nextChangedCell = { ...state.board[index] }
     nextChangedCell[direction] = 'filled'
+    nextState[index] = nextChangedCell
     state.board = nextState
   },
   updateActive(state, nextState) {
@@ -87,13 +88,10 @@ export const actions = {
         changePayload.direction = borderDirection
         console.log('changePayload', changePayload)
       }
-      if (borderDirection === 'left') {
+      if (borderDirection === 'left' || borderDirection === 'top') {
         changePayload.index = index
-        changePayload.direction = 'right'
-      }
-      if (borderDirection === 'top') {
-        changePayload.index = index
-        changePayload.direction = 'bottom'
+        changePayload.direction =
+          borderDirection === 'left' ? 'right' : 'bottom'
       }
       commit('updateCell', changePayload)
       commit('updateActive', null)
