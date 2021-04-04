@@ -23,7 +23,6 @@ export const getters = {
     const clicked = getters.getCellData(clickedId)
 
     if (!active) {
-      console.log('no active')
       return
     }
 
@@ -53,7 +52,6 @@ export const mutations = {
     state.board = nextState
   },
   updateCell(state, { index, direction }) {
-    console.log(index, direction)
     let nextState = [...state.board]
     let nextChangedCell = { ...state.board[index] }
     nextChangedCell[direction] = 'filled'
@@ -86,7 +84,6 @@ export const actions = {
       if (borderDirection === 'right' || borderDirection === 'bottom') {
         changePayload.index = getters.getActiveCell
         changePayload.direction = borderDirection
-        console.log('changePayload', changePayload)
       }
       if (borderDirection === 'left' || borderDirection === 'top') {
         changePayload.index = index
@@ -104,6 +101,7 @@ export const actions = {
       commit('updateActive', index)
     } else {
       dispatch('addLine', index)
+      // TODO: detect new boxes and put player icon inside it
     }
   },
 }
